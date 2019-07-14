@@ -4,6 +4,7 @@ import { Readable } from "stream";
 
 export interface ActionOption {
   command: string;
+  comment?: string;
   action: (message: Message) => void;
 }
 
