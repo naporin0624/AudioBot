@@ -9,7 +9,7 @@ import { ReadStream } from "tty";
 import axios, { AxiosResponse } from "axios";
 import { Readable } from "stream";
 
-export default class Audio extends Bot {
+export default class Audio {
   public streamList: Promise<ReadStream | Readable>[] = [];
   private dispatcher?: StreamDispatcher;
 
@@ -94,8 +94,8 @@ export default class Audio extends Bot {
   }
   private switchPlugin(url: string): BotPlugin | undefined {
     const parser = new URLParse(url);
-    if (parser.host.includes("nicovideo")) return this.plugins.niconico;
-    else if (parser.host.includes("youtube")) return this.plugins.youtube;
-    else if (parser.href.endsWith(".mp3")) return this.plugins.mp3;
+    if (parser.host.includes("nicovideo")) return Bot.prototype.plugins.niconico;
+    else if (parser.host.includes("youtube")) return Bot.prototype.plugins.youtube;
+    else if (parser.href.endsWith(".mp3")) return Bot.prototype.plugins.mp3;
   }
 }

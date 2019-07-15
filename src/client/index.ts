@@ -9,16 +9,14 @@ export default class BotClient extends Client {
   public plugins!: { [key: string]: BotPlugin };
   private commandList: string[] = [];
 
-  public constructor(payload?: Bot) {
+  public constructor(payload: Bot) {
     super();
     this.client = new Client();
-    if (payload && payload.msgActions) {
-      this.msgActions = payload.msgActions;
-      this.commandList = this.msgActions.map((action: ActionOption): string => {
-        return action.command;
-      });
-      this.registerEvent();
-    }
+    this.msgActions = payload.msgActions;
+    this.commandList = this.msgActions.map((action: ActionOption): string => {
+      return action.command;
+    });
+    this.registerEvent();
     this.readyMsg();
   }
 
