@@ -14,7 +14,7 @@ or
 yarn install
 ```
 
-### 開発環境用にnodemonを入れると楽かも
+### 開発環境用にnodemonを入れると楽かも
 
 ```shell
 npm install --save nodemon
