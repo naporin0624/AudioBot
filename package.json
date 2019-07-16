@@ -29,7 +29,6 @@
     "opusscript": "^0.0.6",
     "tough-cookie": "^3.0.1",
     "url-parse": "^1.4.7",
-    "ytdl": "^0.12.0",
     "ytdl-core": "^0.29.3"
   }
 }
