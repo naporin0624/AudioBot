@@ -6,8 +6,8 @@ import Bot, {
 } from "../client";
 import URLParse from "url-parse";
 import { ReadStream } from "tty";
-import axios, { AxiosResponse } from "axios";
 import { Readable } from "stream";
+import axios, { AxiosResponse } from "axios";
 
 export default class Audio {
   public streamList: Promise<ReadStream | Readable>[] = [];
@@ -87,15 +87,17 @@ export default class Audio {
       return undefined;
     }
   }
-  private async createStream(url: string): Promise<void> {
+  private createStream(url: string): void {
     const plugin = this.switchPlugin(url);
     const stream = plugin && plugin.httpStream(url);
     stream && this.streamList.push(stream);
   }
   private switchPlugin(url: string): BotPlugin | undefined {
     const parser = new URLParse(url);
-    if (parser.host.includes("nicovideo")) return Bot.prototype.plugins.niconico;
-    else if (parser.host.includes("youtube")) return Bot.prototype.plugins.youtube;
+    if (parser.host.includes("nicovideo"))
+      return Bot.prototype.plugins.niconico;
+    else if (parser.host.includes("youtube"))
+      return Bot.prototype.plugins.youtube;
     else if (parser.href.endsWith(".mp3")) return Bot.prototype.plugins.mp3;
   }
 }
