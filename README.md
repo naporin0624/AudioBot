@@ -56,4 +56,38 @@ yarn build
 node dist/app.js
 ```
 
+## コマンド
+
+### play
+
+playコマンドを使うごとにリストに音楽がキューイングされます
+
+```shell
+play youtubeURL or niconicoURL or .mp3で終わるURL
+```
+
+### stop
+
+再生中の音楽を止めてキューを削除します
+
+```shell
+stop
+```
+
+### pause
+
+再生中の音楽を一時停止します
+
+```shell
+pause
+```
+
+### resume
+
+一時停止した音楽を再生します
+
+```shell
+resume
+```
+
 おわり
