@@ -1,7 +1,6 @@
 import axios from "axios";
 import axiosCookieJarSupport from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
-import { EventEmitter } from "events";
 import { JSDOM } from "jsdom";
 import URLParse from "url-parse";
 import { ReadStream } from "tty";
@@ -27,18 +26,8 @@ export class Niconico {
   }
 }
 
-export class NicoVideo extends EventEmitter {
-  public cookieJar: CookieJar;
-
-  public constructor(cookieJar: CookieJar) {
-    super();
-    this.cookieJar = cookieJar;
-    axiosCookieJarSupport(axios);
-    axios.defaults.withCredentials = true;
-    axios.defaults.jar = this.cookieJar;
-  }
-
-  public async watch(videoID: string): Promise<{ [key: string]: any }> {
+export default class NicoPlugin implements BotPlugin {
+  private async watch(videoID: string): Promise<{ [key: string]: any }> {
     const res = await axios.get(`https://www.nicovideo.jp/watch/${videoID}`);
     const body = res.data;
     const { document } = new JSDOM(body).window;
@@ -57,36 +46,5 @@ export class NicoVideo extends EventEmitter {
     const uri = data.video.smileInfo.url;
     const res = await axios.get(uri, { responseType: "stream" });
     return res.data;
-  }
-}
-
-export default class NicoPlugin implements BotPlugin {
-  public cookieJar!: CookieJar;
-
-  public constructor(email: string, password: string) {
-    const niconico = new Niconico();
-    niconico
-      .login(email, password)
-      .then((cookieJar: CookieJar): void => {
-        this.cookieJar = cookieJar;
-      })
-      .catch((error: Error): void => {
-        throw error;
-      });
-  }
-  public async httpStream(url: string): Promise<ReadStream> {
-    await this.pendLogin();
-    const client = new NicoVideo(this.cookieJar);
-    return client.httpStream(url);
-  }
-  private pendLogin(): Promise<void> {
-    return new Promise((resolve): void => {
-      const intervalId: number = setInterval((): void => {
-        if (this.cookieJar) {
-          resolve();
-          clearInterval(intervalId);
-        }
-      });
-    });
   }
 }
