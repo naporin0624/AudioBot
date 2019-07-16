@@ -53,7 +53,6 @@ export default class Audio {
     if (this.dispatcher) this.dispatcher.resume();
     else message.reply("今なんもしてないよ");
   }
-
   private async isURL(url: string): Promise<boolean> {
     const res = await axios.get(url).catch(
       (res: AxiosResponse): AxiosResponse => {
@@ -64,7 +63,6 @@ export default class Audio {
     if (res.status === 200) return Promise.resolve(true);
     else return Promise.resolve(false);
   }
-
   private async playAudio(conn: VoiceConnection): Promise<void> {
     if (this.streamList.length < 1) return;
     console.log(this.streamList.length);
