@@ -7,26 +7,12 @@ import { ReadStream } from "tty";
 
 import { BotPlugin } from "../client";
 
-export class Niconico {
-  public cookieJar: CookieJar;
+export default class NicoPlugin implements BotPlugin {
   public constructor() {
-    this.cookieJar = new CookieJar();
     axiosCookieJarSupport(axios);
     axios.defaults.withCredentials = true;
-    axios.defaults.jar = this.cookieJar;
+    axios.defaults.jar = new CookieJar();
   }
-  public async login(email: string, password: string): Promise<CookieJar> {
-    const loginURL = "https://account.nicovideo.jp/api/v1/login?site=niconico";
-
-    const params = new URLSearchParams();
-    params.append("mail_tel", email);
-    params.append("password", password);
-    await axios.post(loginURL, params);
-    return this.cookieJar;
-  }
-}
-
-export default class NicoPlugin implements BotPlugin {
   private async watch(videoID: string): Promise<{ [key: string]: any }> {
     const res = await axios.get(`https://www.nicovideo.jp/watch/${videoID}`);
     const body = res.data;
