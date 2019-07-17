@@ -3,15 +3,26 @@ import axiosCookieJarSupport from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { JSDOM } from "jsdom";
 import URLParse from "url-parse";
-import { ReadStream } from "tty";
+import { Adapter } from "./base";
+import { Readable } from "stream";
 
-import { BotPlugin } from "../client";
-
-export default class NicoPlugin implements BotPlugin {
-  public constructor() {
+export class NiconicoAdapter extends Adapter {
+  public constructor(url: string) {
+    super(url);
     axiosCookieJarSupport(axios);
     axios.defaults.withCredentials = true;
     axios.defaults.jar = new CookieJar();
+  }
+  public isHandleable(): boolean {
+    return this.url.includes("nicovideo");
+  }
+  public async fetchStream(): Promise<Readable> {
+    const parsed = new URLParse(this.url);
+    const videoId = parsed.pathname.replace("/watch/", "");
+    const data = await this.watch(videoId);
+    const uri = data.video.smileInfo.url;
+    const res = await axios.get(uri, { responseType: "stream" });
+    return res.data;
   }
   private async watch(videoID: string): Promise<{ [key: string]: any }> {
     const res = await axios.get(`https://www.nicovideo.jp/watch/${videoID}`);
@@ -23,14 +34,5 @@ export default class NicoPlugin implements BotPlugin {
       if (api) return JSON.parse(api);
       else throw "data-api-data is not found";
     } else throw "data-api-data is not found";
-  }
-
-  public async httpStream(url: string): Promise<ReadStream> {
-    const parsed = new URLParse(url);
-    const videoId = parsed.pathname.replace("/watch/", "");
-    const data = await this.watch(videoId);
-    const uri = data.video.smileInfo.url;
-    const res = await axios.get(uri, { responseType: "stream" });
-    return res.data;
   }
 }
