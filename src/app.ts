@@ -5,7 +5,7 @@ import config from "./config";
 import { niconico, mp3, youtube } from "./plugins";
 
 const plugins = {
-  niconico: new niconico(config.niconico.email, config.niconico.password),
+  niconico: new niconico(),
   mp3: new mp3(),
   youtube: new youtube()
 };
