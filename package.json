@@ -24,7 +24,7 @@
     "axios-cookiejar-support": "^0.5.0",
     "discord.js": "^11.5.1",
     "ffmpeg-binaries": "^4.0.0",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.5.0",
     "node-opus": "^0.3.2",
     "opusscript": "^0.0.6",
     "tough-cookie": "^3.0.1",
